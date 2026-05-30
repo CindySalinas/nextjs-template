@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { Button } from '@/ui/button'
 import { Input } from '@/ui/input'
 import { Label } from '@/ui/label'
@@ -9,6 +10,7 @@ import { Label } from '@/ui/label'
 export function ForgotPasswordForm() {
   const [sent, setSent] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const t = useTranslations('auth')
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -22,9 +24,9 @@ export function ForgotPasswordForm() {
   if (sent) {
     return (
       <p className="text-muted-foreground text-center text-sm">
-        If that email exists, a reset link has been sent.{' '}
+        {t('resetSent')}{' '}
         <Link href="/login" className="underline">
-          Back to sign in
+          {t('backToSignIn')}
         </Link>
       </p>
     )
@@ -33,15 +35,15 @@ export function ForgotPasswordForm() {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       <div className="flex flex-col gap-2">
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor="email">{t('email')}</Label>
         <Input id="email" type="email" placeholder="you@example.com" required />
       </div>
       <Button type="submit" disabled={isLoading} className="w-full">
-        {isLoading ? 'Sending...' : 'Send reset link'}
+        {isLoading ? t('sending') : t('sendResetLink')}
       </Button>
       <p className="text-muted-foreground text-center text-sm">
         <Link href="/login" className="underline">
-          Back to sign in
+          {t('backToSignIn')}
         </Link>
       </p>
     </form>

@@ -17,12 +17,12 @@ export function TestimonialsSection() {
     <section className="container mx-auto px-4 py-24">
       <h2 className="mb-12 text-center text-4xl font-bold">What people say</h2>
       <div className="grid gap-8 md:grid-cols-3">
-        {testimonials.map((t) => (
-          <div key={t.author} className="border-border rounded-lg border p-6">
-            <p className="text-muted-foreground">&ldquo;{t.quote}&rdquo;</p>
+        {testimonials.map((item) => (
+          <div key={item.author} className="border-border rounded-lg border p-6">
+            <p className="text-muted-foreground">&ldquo;{item.quote}&rdquo;</p>
             <div className="mt-4">
-              <p className="font-semibold">{t.author}</p>
-              <p className="text-muted-foreground text-sm">{t.role}</p>
+              <p className="font-semibold">{item.author}</p>
+              <p className="text-muted-foreground text-sm">{item.role}</p>
             </div>
           </div>
         ))}

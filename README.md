@@ -78,11 +78,48 @@ app/ → features/ → components/ → lib/
 
 See `docs/specs/2026-05-30-nextjs-boilerplate-design.md` for the full design.
 
-## Adding a Language
+## i18n
 
-1. Add a JSON file to `messages/` (e.g., `messages/es.json`)
-2. Add the locale code to `src/lib/i18n/routing.ts`
-3. Done — no other changes required.
+Translation strings live in `messages/en.json`. Components consume them via `next-intl`.
+
+**Server Component** (page, layout, async component):
+
+```tsx
+import { getTranslations } from 'next-intl/server'
+
+export async function MyComponent() {
+  const t = await getTranslations('nav')
+  return <h1>{t('about')}</h1>
+}
+```
+
+**Client Component** (`'use client'`):
+
+```tsx
+'use client'
+import { useTranslations } from 'next-intl'
+
+export function MyComponent() {
+  const t = useTranslations('auth')
+  return <button>{t('signIn')}</button>
+}
+```
+
+**Adding a string:** add the key to `messages/en.json` (and any other locale files), then use `t('key')` in the component.
+
+> Marketing copy (hero, testimonials, pricing) is intentionally hardcoded — you'll replace it with your own content anyway.
+
+**Adding a language:**
+
+1. Copy `messages/en.json` → `messages/es.json` and translate the values
+2. Add the locale to `src/lib/i18n/routing.ts`:
+
+```ts
+export const routing = defineRouting({
+  locales: ['en', 'es'],
+  defaultLocale: 'en',
+})
+```
 
 ## Connecting Real Auth
 

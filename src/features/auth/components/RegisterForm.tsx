@@ -2,12 +2,14 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { Button } from '@/ui/button'
 import { Input } from '@/ui/input'
 import { Label } from '@/ui/label'
 
 export function RegisterForm() {
   const [isLoading, setIsLoading] = useState(false)
+  const t = useTranslations('auth')
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -20,24 +22,24 @@ export function RegisterForm() {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       <div className="flex flex-col gap-2">
-        <Label htmlFor="name">Full name</Label>
+        <Label htmlFor="name">{t('fullName')}</Label>
         <Input id="name" type="text" placeholder="Jane Doe" required />
       </div>
       <div className="flex flex-col gap-2">
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor="email">{t('email')}</Label>
         <Input id="email" type="email" placeholder="you@example.com" required />
       </div>
       <div className="flex flex-col gap-2">
-        <Label htmlFor="password">Password</Label>
+        <Label htmlFor="password">{t('password')}</Label>
         <Input id="password" type="password" placeholder="••••••••" required />
       </div>
       <Button type="submit" disabled={isLoading} className="w-full">
-        {isLoading ? 'Creating account...' : 'Create account'}
+        {isLoading ? t('creatingAccount') : t('register')}
       </Button>
       <p className="text-muted-foreground text-center text-sm">
-        Already have an account?{' '}
+        {t('alreadyHaveAccount')}{' '}
         <Link href="/login" className="underline">
-          Sign in
+          {t('signIn')}
         </Link>
       </p>
     </form>

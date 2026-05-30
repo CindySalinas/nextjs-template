@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { Button } from '@/ui/button'
 import { Input } from '@/ui/input'
 import { Label } from '@/ui/label'
@@ -15,6 +16,7 @@ export function LoginForm() {
   const [isLoading, setIsLoading] = useState(false)
   const { signIn } = useAuthContext()
   const router = useRouter()
+  const t = useTranslations('auth')
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -24,7 +26,7 @@ export function LoginForm() {
       await signIn(email, password)
       router.push('/dashboard')
     } catch {
-      setError('Invalid credentials. Try any email/password.')
+      setError(t('invalidCredentials'))
     } finally {
       setIsLoading(false)
     }
@@ -33,7 +35,7 @@ export function LoginForm() {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       <div className="flex flex-col gap-2">
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor="email">{t('email')}</Label>
         <Input
           id="email"
           type="email"
@@ -44,7 +46,7 @@ export function LoginForm() {
         />
       </div>
       <div className="flex flex-col gap-2">
-        <Label htmlFor="password">Password</Label>
+        <Label htmlFor="password">{t('password')}</Label>
         <Input
           id="password"
           type="password"
@@ -56,17 +58,17 @@ export function LoginForm() {
       </div>
       {error && <p className="text-sm text-red-500">{error}</p>}
       <Button type="submit" disabled={isLoading} className="w-full">
-        {isLoading ? 'Signing in...' : 'Sign in'}
+        {isLoading ? t('signingIn') : t('signIn')}
       </Button>
       <p className="text-muted-foreground text-center text-sm">
-        No account?{' '}
+        {t('noAccount')}{' '}
         <Link href="/register" className="underline">
-          Create one
+          {t('createOne')}
         </Link>
       </p>
       <p className="text-muted-foreground text-center text-sm">
         <Link href="/forgot-password" className="underline">
-          Forgot password?
+          {t('forgotPasswordLink')}
         </Link>
       </p>
     </form>

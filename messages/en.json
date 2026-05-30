@@ -11,13 +11,21 @@
   },
   "auth": {
     "signIn": "Sign in",
+    "signingIn": "Signing in...",
     "register": "Create account",
+    "creatingAccount": "Creating account...",
     "forgotPassword": "Forgot password",
+    "sendResetLink": "Send reset link",
+    "sending": "Sending...",
     "email": "Email",
     "password": "Password",
     "fullName": "Full name",
     "noAccount": "No account?",
+    "createOne": "Create one",
     "alreadyHaveAccount": "Already have an account?",
-    "invalidCredentials": "Invalid credentials. Try any email/password."
+    "invalidCredentials": "Invalid credentials. Try any email/password.",
+    "resetSent": "If that email exists, a reset link has been sent.",
+    "backToSignIn": "Back to sign in",
+    "forgotPasswordLink": "Forgot password?"
   }
 }
