@@ -42,3 +42,7 @@ next-env.d.ts
 
 # docs (local only)
 /docs
+
+# AI assistant tooling
+.superpowers/
+AGENTS.md

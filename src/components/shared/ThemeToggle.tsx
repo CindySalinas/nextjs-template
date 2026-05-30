@@ -1,7 +1,7 @@
 'use client'
 
-import { Button } from '@/ui/button'
 import { Icons } from '@/shared/Icons'
+import { Button } from '@/ui/button'
 
 export function ThemeToggle() {
   function toggle() {

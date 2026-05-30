@@ -1,8 +1,22 @@
 {
   "recommendations": [
+    // ── Core DX ──────────────────────────────────────────────────────────
     "esbenp.prettier-vscode",
     "dbaeumer.vscode-eslint",
+    "EditorConfig.EditorConfig",
+
+    // ── TypeScript & Next.js ─────────────────────────────────────────────
+    "ms-vscode.vscode-typescript-next",
+    "yoavbls.pretty-ts-errors",
+
+    // ── Tailwind ──────────────────────────────────────────────────────────
     "bradlc.vscode-tailwindcss",
-    "ms-vscode.vscode-typescript-next"
+
+    // ── Testing ───────────────────────────────────────────────────────────
+    "vitest.explorer",
+    "ms-playwright.playwright",
+
+    // ── Git ───────────────────────────────────────────────────────────────
+    "eamodio.gitlens"
   ]
 }

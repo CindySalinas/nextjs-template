@@ -1,8 +1,30 @@
 {
+  // ── Formatting ────────────────────────────────────────────────────────
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.tabSize": 2,
+  "editor.rulers": [100],
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.eol": "\n",
+
+  // ── ESLint ────────────────────────────────────────────────────────────
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "never"
   },
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
+
+  // ── TypeScript ────────────────────────────────────────────────────────
+  // Use the project's TypeScript version instead of VSCode's bundled one
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+
+  // ── Tailwind ─────────────────────────────────────────────────────────
+  // Teach IntelliSense to read Tailwind 4 CSS-based config
+  "tailwindCSS.experimental.configFile": "src/styles/globals.css",
+
+  // ── Testing ───────────────────────────────────────────────────────────
+  "vitest.enable": true,
+  "vitest.commandLine": "pnpm test:watch"
 }

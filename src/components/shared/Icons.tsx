@@ -1,4 +1,4 @@
-import { Loader2, Moon, Sun, Menu, X } from 'lucide-react'
+import { Loader2, Menu, Moon, Sun, X } from 'lucide-react'
 
 export const Icons = {
   spinner: Loader2,

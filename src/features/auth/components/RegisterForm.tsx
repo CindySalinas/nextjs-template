@@ -1,8 +1,9 @@
 'use client'
 
-import { useState } from 'react'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
+import { useState } from 'react'
+
 import { Button } from '@/ui/button'
 import { Input } from '@/ui/input'
 import { Label } from '@/ui/label'

@@ -1,6 +1,6 @@
-import prompts from 'prompts'
-import { rmSync, readFileSync, writeFileSync } from 'fs'
+import { readFileSync, rmSync, writeFileSync } from 'fs'
 import { resolve } from 'path'
+import prompts from 'prompts'
 
 async function main() {
   console.log('\n🚀 Next.js Boilerplate Setup\n')

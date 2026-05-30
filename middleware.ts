@@ -1,6 +1,7 @@
-import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { MOCK_SESSION_COOKIE, PROTECTED_ROUTES, AUTH_ROUTES } from '@/lib/auth/types'
+import { NextResponse } from 'next/server'
+
+import { AUTH_ROUTES, MOCK_SESSION_COOKIE, PROTECTED_ROUTES } from '@/lib/auth/types'
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl

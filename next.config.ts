@@ -1,6 +1,7 @@
+import './src/types/env.d'
+
 import type { NextConfig } from 'next'
 import createNextIntlPlugin from 'next-intl/plugin'
-import './src/types/env.d'
 
 const withNextIntl = createNextIntlPlugin('./src/lib/i18n/request.ts')
 

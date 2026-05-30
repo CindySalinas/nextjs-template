@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+
 import { seoDefaults } from './defaults'
 
 interface PageMetadataOptions {

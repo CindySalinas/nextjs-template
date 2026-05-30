@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { getTranslations } from 'next-intl/server'
+
 import { ThemeToggle } from '@/shared/ThemeToggle'
 import { buttonVariants } from '@/ui/button'
 

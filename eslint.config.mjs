@@ -1,15 +1,23 @@
+import tsParser from '@typescript-eslint/parser'
 import { defineConfig, globalIgnores } from 'eslint/config'
 import nextVitals from 'eslint-config-next/core-web-vitals'
 import nextTs from 'eslint-config-next/typescript'
 import boundaries from 'eslint-plugin-boundaries'
-import tsParser from '@typescript-eslint/parser'
+import security from 'eslint-plugin-security'
+import simpleImportSort from 'eslint-plugin-simple-import-sort'
+import unusedImports from 'eslint-plugin-unused-imports'
 
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
   globalIgnores(['.next/**', 'out/**', 'build/**', 'next-env.d.ts']),
   {
-    plugins: { boundaries },
+    plugins: {
+      boundaries,
+      'simple-import-sort': simpleImportSort,
+      'unused-imports': unusedImports,
+      security,
+    },
     languageOptions: { parser: tsParser },
     settings: {
       'boundaries/elements': [
@@ -23,6 +31,7 @@ const eslintConfig = defineConfig([
       'boundaries/ignore': ['**/*.test.*', '**/*.spec.*', 'tests/**/*'],
     },
     rules: {
+      // ── Architecture boundaries ───────────────────────────────────────
       'boundaries/element-types': [
         'error',
         {
@@ -37,6 +46,8 @@ const eslintConfig = defineConfig([
           ],
         },
       ],
+
+      // ── Enforce path aliases ──────────────────────────────────────────
       'no-restricted-imports': [
         'error',
         {
@@ -48,6 +59,28 @@ const eslintConfig = defineConfig([
           ],
         },
       ],
+
+      // ── Import sorting ────────────────────────────────────────────────
+      // Groups: 1) Node built-ins  2) External packages  3) Internal aliases  4) Relative
+      'simple-import-sort/imports': 'error',
+      'simple-import-sort/exports': 'error',
+
+      // ── Unused imports ────────────────────────────────────────────────
+      // unused-imports catches `import Foo from 'foo'` where Foo is never used.
+      // @typescript-eslint/no-unused-vars only catches variable declarations.
+      'unused-imports/no-unused-imports': 'error',
+      'unused-imports/no-unused-vars': [
+        'warn',
+        { vars: 'all', varsIgnorePattern: '^_', args: 'after-used', argsIgnorePattern: '^_' },
+      ],
+
+      // ── Security ──────────────────────────────────────────────────────
+      // Catches unsafe patterns: non-literal RegExp, eval, object injection, etc.
+      'security/detect-object-injection': 'warn',
+      'security/detect-non-literal-regexp': 'warn',
+      'security/detect-non-literal-fs-filename': 'warn',
+      'security/detect-eval-with-expression': 'error',
+      'security/detect-possible-timing-attacks': 'warn',
     },
   },
 ])

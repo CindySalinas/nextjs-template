@@ -1,13 +1,14 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
+import { useState } from 'react'
+
+import { useAuthContext } from '@/features/auth/providers/MockAuthProvider'
 import { Button } from '@/ui/button'
 import { Input } from '@/ui/input'
 import { Label } from '@/ui/label'
-import { useAuthContext } from '@/features/auth/providers/MockAuthProvider'
 
 export function LoginForm() {
   const [email, setEmail] = useState('')

@@ -1,8 +1,10 @@
+import '@/styles/globals.css'
+
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+
 import { MockAuthProvider } from '@/features/auth/providers/MockAuthProvider'
 import { JsonLd } from '@/shared/JsonLd'
-import '@/styles/globals.css'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
