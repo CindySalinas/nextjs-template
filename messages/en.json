@@ -1,6 +1,23 @@
 {
   "common": {
     "loading": "Loading...",
-    "error": "Something went wrong"
+    "error": "Something went wrong",
+    "backToHome": "Back to home"
+  },
+  "nav": {
+    "about": "About",
+    "pricing": "Pricing",
+    "signIn": "Sign in"
+  },
+  "auth": {
+    "signIn": "Sign in",
+    "register": "Create account",
+    "forgotPassword": "Forgot password",
+    "email": "Email",
+    "password": "Password",
+    "fullName": "Full name",
+    "noAccount": "No account?",
+    "alreadyHaveAccount": "Already have an account?",
+    "invalidCredentials": "Invalid credentials. Try any email/password."
   }
 }

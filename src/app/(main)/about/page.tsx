@@ -1,6 +1,11 @@
 import type { Metadata } from 'next'
+import { generatePageMetadata } from '@/lib/seo/metadata'
 
-export const metadata: Metadata = { title: 'About' }
+export const metadata: Metadata = generatePageMetadata({
+  title: 'About',
+  description: 'Learn more about us',
+  path: '/about',
+})
 
 export default function AboutPage() {
   return (
