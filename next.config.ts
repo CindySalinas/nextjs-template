@@ -1,7 +1,8 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next'
+import './src/types/env.d'
 
 const nextConfig: NextConfig = {
-  /* config options here */
-};
+  output: 'standalone',
+}
 
-export default nextConfig;
+export default nextConfig
