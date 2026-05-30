@@ -15,7 +15,8 @@ const eslintConfig = defineConfig([
       'boundaries/elements': [
         { type: 'app', pattern: 'src/app/**/*' },
         { type: 'features', pattern: 'src/features/**/*' },
-        { type: 'components', pattern: 'src/components/**/*' },
+        { type: 'shared', pattern: 'src/components/shared/**/*' },
+        { type: 'ui', pattern: 'src/components/ui/**/*' },
         { type: 'lib', pattern: 'src/lib/**/*' },
         { type: 'types', pattern: 'src/types/**/*' },
       ],
@@ -28,8 +29,9 @@ const eslintConfig = defineConfig([
           default: 'disallow',
           rules: [
             { from: 'app', allow: ['features', 'lib', 'types'] },
-            { from: 'features', allow: ['components', 'lib', 'types'] },
-            { from: 'components', allow: ['lib', 'types'] },
+            { from: 'features', allow: ['shared', 'ui', 'lib', 'types'] },
+            { from: 'shared', allow: ['ui', 'lib', 'types'] },
+            { from: 'ui', allow: ['lib', 'types'] },
             { from: 'lib', allow: ['types'] },
             { from: 'types', allow: [] },
           ],
