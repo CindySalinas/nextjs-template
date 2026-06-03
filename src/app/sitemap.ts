@@ -14,6 +14,7 @@ function resolveLocalePath(
   const entry = pathnames[pathname as keyof typeof pathnames]
   if (!entry) return pathname
   if (typeof entry === 'string') return entry
+  // eslint-disable-next-line security/detect-object-injection
   return (entry as Record<string, string>)[locale] ?? pathname
 }
 

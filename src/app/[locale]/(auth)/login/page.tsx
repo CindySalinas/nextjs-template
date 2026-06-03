@@ -6,6 +6,7 @@ import { generatePageMetadata } from '@/lib/seo/metadata'
 export const metadata: Metadata = generatePageMetadata({
   title: 'Sign in',
   description: 'Sign in to your account.',
+  locale: 'en',
   path: '/login',
   noIndex: true,
 })

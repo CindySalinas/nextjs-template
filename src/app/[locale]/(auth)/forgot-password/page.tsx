@@ -6,6 +6,7 @@ import { generatePageMetadata } from '@/lib/seo/metadata'
 export const metadata: Metadata = generatePageMetadata({
   title: 'Forgot password',
   description: 'Reset your password.',
+  locale: 'en',
   path: '/forgot-password',
   noIndex: true,
 })
