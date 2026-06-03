@@ -23,7 +23,9 @@ export default defineConfig({
         'src/lib/utils.ts',
         'src/lib/seo/metadata.ts',
         'src/lib/validations/**',
+        'src/middleware/auth.ts',
         'src/features/**/hooks/**',
+        'src/features/auth/providers/MockAuthProvider.tsx',
       ],
       exclude: ['**/*.d.ts', '**/index.ts'],
       thresholds: {
