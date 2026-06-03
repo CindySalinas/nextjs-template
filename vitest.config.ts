@@ -19,7 +19,12 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'lcov', 'html'],
-      include: ['src/lib/utils.ts', 'src/lib/seo/metadata.ts', 'src/features/**/hooks/**'],
+      include: [
+        'src/lib/utils.ts',
+        'src/lib/seo/metadata.ts',
+        'src/lib/validations/**',
+        'src/features/**/hooks/**',
+      ],
       exclude: ['**/*.d.ts', '**/index.ts'],
       thresholds: {
         statements: 80,
