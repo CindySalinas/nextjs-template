@@ -27,5 +27,19 @@
     "resetSent": "Si ese correo existe, se ha enviado un enlace de recuperación.",
     "backToSignIn": "Volver a iniciar sesión",
     "forgotPasswordLink": "¿Olvidaste tu contraseña?"
+  },
+  "meta": {
+    "home": {
+      "title": "Construye tu próximo producto más rápido",
+      "description": "Un boilerplate de Next.js 16 listo para producción con todo lo que necesitas para lanzar en 2026."
+    },
+    "about": {
+      "title": "Sobre nosotros",
+      "description": "Conoce al equipo y la misión detrás de este boilerplate."
+    },
+    "pricing": {
+      "title": "Precios",
+      "description": "Precios simples y transparentes para cada etapa de tu proyecto."
+    }
   }
 }

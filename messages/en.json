@@ -27,5 +27,19 @@
     "resetSent": "If that email exists, a reset link has been sent.",
     "backToSignIn": "Back to sign in",
     "forgotPasswordLink": "Forgot password?"
+  },
+  "meta": {
+    "home": {
+      "title": "Build your next product faster",
+      "description": "A production-ready Next.js 16 boilerplate with everything you need to ship in 2026."
+    },
+    "about": {
+      "title": "About us",
+      "description": "Learn about the team and mission behind this boilerplate."
+    },
+    "pricing": {
+      "title": "Pricing",
+      "description": "Simple, transparent pricing for every stage of your project."
+    }
   }
 }
