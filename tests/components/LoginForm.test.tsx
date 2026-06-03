@@ -9,14 +9,12 @@ import { LoginForm } from '@/features/auth/components/LoginForm'
 import messages from '../../messages/en.json'
 
 const mockSignIn = vi.fn()
-const mockPush = vi.fn()
 
 vi.mock('@/features/auth/providers/MockAuthProvider', () => ({
   useAuthContext: () => ({ signIn: mockSignIn }),
 }))
 
 vi.mock('@/lib/i18n/navigation', () => ({
-  useRouter: () => ({ push: mockPush }),
   Link: ({
     href,
     children,
@@ -58,8 +56,8 @@ describe('LoginForm', () => {
 
     await waitFor(() => {
       expect(mockSignIn).toHaveBeenCalledWith('test@example.com', 'secret123')
-      expect(mockPush).toHaveBeenCalledWith('/dashboard')
     })
+    // Redirect is handled by MockAuthProvider — not asserted here
   })
 
   it('shows error message when signIn throws', async () => {

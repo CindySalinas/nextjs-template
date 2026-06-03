@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 
 import { useAuthContext } from '@/features/auth/providers/MockAuthProvider'
-import { Link, useRouter } from '@/lib/i18n/navigation'
+import { Link } from '@/lib/i18n/navigation'
 import { Button } from '@/ui/button'
 import { Input } from '@/ui/input'
 import { Label } from '@/ui/label'
@@ -15,7 +15,6 @@ export function LoginForm() {
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const { signIn } = useAuthContext()
-  const router = useRouter()
   const t = useTranslations('auth')
 
   async function handleSubmit(e: React.FormEvent) {
@@ -24,7 +23,7 @@ export function LoginForm() {
     setIsLoading(true)
     try {
       await signIn(email, password)
-      router.push('/dashboard')
+      // MockAuthProvider.signIn reads ?from= and calls router.replace internally
     } catch {
       setError(t('invalidCredentials'))
     } finally {
