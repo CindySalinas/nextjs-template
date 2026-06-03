@@ -6,6 +6,7 @@ describe('generatePageMetadata', () => {
   const base = {
     title: 'Test Page',
     description: 'Test description',
+    locale: 'en',
   }
 
   it('returns title and description', () => {
@@ -14,15 +15,39 @@ describe('generatePageMetadata', () => {
     expect(meta.description).toBe('Test description')
   })
 
-  it('sets canonical URL from path', () => {
-    const meta = generatePageMetadata({ ...base, path: '/about' })
-    expect(meta.alternates?.canonical).toContain('/about')
+  it('sets canonical with locale prefix for non-default locale', () => {
+    const meta = generatePageMetadata({ ...base, locale: 'es', path: '/sobre' })
+    const canonical = meta.alternates?.canonical as string
+    expect(canonical).toContain('/es/sobre')
+    expect(canonical).not.toMatch(/^http:\/\/[^/]+\/about/)
   })
 
-  it('sets canonical URL to base url when path is omitted', () => {
+  it('sets canonical WITHOUT locale prefix for default locale (en)', () => {
+    const meta = generatePageMetadata({ ...base, locale: 'en', path: '/about' })
+    const canonical = meta.alternates?.canonical as string
+    expect(canonical).toContain('/about')
+    expect(canonical).not.toContain('/en/')
+  })
+
+  it('uses base URL when path is omitted', () => {
     const meta = generatePageMetadata(base)
     const canonical = meta.alternates?.canonical as string
     expect(canonical).not.toContain('undefined')
+    expect(canonical).toMatch(/^http/)
+  })
+
+  it('sets hreflang alternates from alternateUrls', () => {
+    const alternateUrls = {
+      en: 'http://localhost:3000/about',
+      es: 'http://localhost:3000/es/sobre',
+    }
+    const meta = generatePageMetadata({ ...base, alternateUrls })
+    expect(meta.alternates?.languages).toEqual(alternateUrls)
+  })
+
+  it('omits alternates.languages when alternateUrls is not provided', () => {
+    const meta = generatePageMetadata(base)
+    expect(meta.alternates?.languages).toBeUndefined()
   })
 
   it('allows indexing by default', () => {
@@ -49,7 +74,6 @@ describe('generatePageMetadata', () => {
 
   it('includes twitter card metadata', () => {
     const meta = generatePageMetadata(base)
-    // Cast needed: Next.js Twitter type is a discriminated union
     const twitter = meta.twitter as Record<string, unknown>
     expect(twitter['card']).toBe('summary_large_image')
     expect(twitter['title']).toBe('Test Page')
@@ -57,7 +81,6 @@ describe('generatePageMetadata', () => {
 
   it('sets openGraph siteName and type', () => {
     const meta = generatePageMetadata(base)
-    // Cast needed: Next.js OpenGraph type is a discriminated union
     const og = meta.openGraph as Record<string, unknown>
     expect(og['type']).toBe('website')
     expect(og['siteName']).toBeDefined()

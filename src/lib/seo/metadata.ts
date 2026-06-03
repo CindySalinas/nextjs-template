@@ -5,31 +5,26 @@ import { seoDefaults } from './defaults'
 interface PageMetadataOptions {
   title: string
   description: string
+  locale: string
   path?: string
   image?: string
   noIndex?: boolean
-  // Provide locales to generate hreflang alternate links.
-  // Example: locales: ['en', 'es'] adds <link rel="alternate" hreflang="..."> for each.
-  locales?: string[]
+  alternateUrls?: Record<string, string>
 }
 
 export function generatePageMetadata({
   title,
   description,
+  locale,
   path = '',
   image,
   noIndex = false,
-  locales,
+  alternateUrls,
 }: PageMetadataOptions): Metadata {
-  const url = `${seoDefaults.siteUrl}${path}`
+  const isDefault = locale === seoDefaults.defaultLocale
+  const localePath = isDefault ? path : `/${locale}${path}`
+  const url = `${seoDefaults.siteUrl}${localePath}`
   const ogImage = image ?? seoDefaults.defaultOgImage
-
-  const languages =
-    locales && locales.length > 0
-      ? Object.fromEntries(
-          locales.map((locale) => [locale, `${seoDefaults.siteUrl}/${locale}${path}`])
-        )
-      : undefined
 
   return {
     title,
@@ -37,7 +32,7 @@ export function generatePageMetadata({
     metadataBase: new URL(seoDefaults.siteUrl),
     alternates: {
       canonical: url,
-      ...(languages ? { languages } : {}),
+      ...(alternateUrls ? { languages: alternateUrls } : {}),
     },
     robots: noIndex ? { index: false, follow: false } : { index: true, follow: true },
     openGraph: {
