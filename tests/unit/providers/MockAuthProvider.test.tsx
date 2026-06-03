@@ -9,6 +9,7 @@ let mockSearchParamsValue: Record<string, string> = {}
 vi.mock('next/navigation', () => ({
   useRouter: () => ({ replace: mockReplace }),
   useSearchParams: () => ({
+    // eslint-disable-next-line security/detect-object-injection
     get: (key: string) => mockSearchParamsValue[key] ?? null,
   }),
 }))
