@@ -1,0 +1,23 @@
+#!/usr/bin/env sh
+
+# Runs before git push. Catches broken builds and test regressions before
+# they reach the remote. Skip with: git push --no-verify
+#
+# Tradeoffs:
+# - Build: ~30-60s. Catches import errors and type errors that tsc --noEmit misses
+#   (e.g. missing env vars at build time, broken dynamic imports).
+# - Tests: runs the full suite, not just affected. Ensures no cross-module regressions.
+# - Coverage: only warns, does not block push — avoids punishing legitimate WIP pushes.
+
+echo "Running pre-push checks..."
+
+echo "→ Type check"
+pnpm exec tsc --noEmit
+
+echo "→ Full test suite"
+pnpm test
+
+echo "→ Coverage (warn only)"
+pnpm test:coverage || echo "⚠ Coverage below threshold — fix before merging to main"
+
+echo "✓ Pre-push checks passed"

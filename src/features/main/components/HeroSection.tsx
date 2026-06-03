@@ -1,5 +1,4 @@
-import Link from 'next/link'
-
+import { Link } from '@/lib/i18n/navigation'
 import { buttonVariants } from '@/ui/button'
 
 export function HeroSection() {

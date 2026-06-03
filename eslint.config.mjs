@@ -10,7 +10,7 @@ import unusedImports from 'eslint-plugin-unused-imports'
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
-  globalIgnores(['.next/**', 'out/**', 'build/**', 'next-env.d.ts']),
+  globalIgnores(['.next/**', 'out/**', 'build/**', 'coverage/**', 'next-env.d.ts']),
   {
     plugins: {
       boundaries,
@@ -73,6 +73,10 @@ const eslintConfig = defineConfig([
         'warn',
         { vars: 'all', varsIgnorePattern: '^_', args: 'after-used', argsIgnorePattern: '^_' },
       ],
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        { vars: 'all', varsIgnorePattern: '^_', args: 'after-used', argsIgnorePattern: '^_' },
+      ],
 
       // ── Security ──────────────────────────────────────────────────────
       // Catches unsafe patterns: non-literal RegExp, eval, object injection, etc.
@@ -81,6 +85,24 @@ const eslintConfig = defineConfig([
       'security/detect-non-literal-fs-filename': 'warn',
       'security/detect-eval-with-expression': 'error',
       'security/detect-possible-timing-attacks': 'warn',
+    },
+  },
+  // ── Test files: relax import rules ───────────────────────────────────────
+  // Tests live outside src/ and legitimately import from messages/, root config, etc.
+  {
+    files: ['tests/**/*', 'vitest.config.ts', 'vitest.setup.ts', 'playwright.config.ts'],
+    rules: {
+      'no-restricted-imports': 'off',
+      'boundaries/element-types': 'off',
+    },
+  },
+  // ── Declaration files: relax structural rules ────────────────────────────
+  // .d.ts files augment global types and must reference source files directly.
+  {
+    files: ['src/types/**/*.d.ts'],
+    rules: {
+      'no-restricted-imports': 'off',
+      '@typescript-eslint/no-empty-object-type': 'off',
     },
   },
 ])

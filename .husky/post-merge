@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+
+# Detects lockfile changes after git pull / git merge.
+# Automatically installs dependencies so the dev never has to remember.
+# Tradeoff: adds ~5-10s after a merge when the lockfile changed. Acceptable
+# because the alternative is subtle runtime errors from stale node_modules.
+
+if git diff --name-only HEAD@{1} HEAD | grep -q "pnpm-lock.yaml"; then
+  echo "pnpm-lock.yaml changed — installing dependencies..."
+  pnpm install --ignore-scripts
+fi

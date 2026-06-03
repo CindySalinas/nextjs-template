@@ -1,11 +1,10 @@
 'use client'
 
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 
 import { useAuthContext } from '@/features/auth/providers/MockAuthProvider'
+import { Link, useRouter } from '@/lib/i18n/navigation'
 import { Button } from '@/ui/button'
 import { Input } from '@/ui/input'
 import { Label } from '@/ui/label'

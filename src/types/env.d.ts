@@ -4,6 +4,7 @@ const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']),
   NEXT_PUBLIC_APP_URL: z.string().url().default('http://localhost:3000'),
   NEXT_PUBLIC_APP_NAME: z.string().default('My App'),
+  NEXT_PUBLIC_TWITTER_HANDLE: z.string().optional(),
 })
 
 const parsed = envSchema.safeParse(process.env)
@@ -17,7 +18,6 @@ export type Env = z.infer<typeof envSchema>
 
 declare global {
   namespace NodeJS {
-    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
     interface ProcessEnv extends Env {}
   }
 }

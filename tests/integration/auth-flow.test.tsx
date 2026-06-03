@@ -1,3 +1,9 @@
+/**
+ * Integration test: MockAuthProvider + LoginForm together.
+ * Unlike the component test, this does NOT mock useAuthContext — it uses the
+ * real provider to verify the full sign-in flow end-to-end in jsdom.
+ * Only the navigation module is mocked because real routing requires a browser.
+ */
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { NextIntlClientProvider } from 'next-intl'
@@ -5,15 +11,12 @@ import React from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { LoginForm } from '@/features/auth/components/LoginForm'
+import { MockAuthProvider } from '@/features/auth/providers/MockAuthProvider'
+import { MOCK_SESSION_COOKIE } from '@/lib/auth/types'
 
 import messages from '../../messages/en.json'
 
-const mockSignIn = vi.fn()
 const mockPush = vi.fn()
-
-vi.mock('@/features/auth/providers/MockAuthProvider', () => ({
-  useAuthContext: () => ({ signIn: mockSignIn }),
-}))
 
 vi.mock('@/lib/i18n/navigation', () => ({
   useRouter: () => ({ push: mockPush }),
@@ -28,51 +31,45 @@ vi.mock('@/lib/i18n/navigation', () => ({
   }) => React.createElement('a', { href, className }, children),
 }))
 
-function renderLoginForm() {
+function renderAuthFlow() {
   return render(
     <NextIntlClientProvider locale="en" messages={messages}>
-      <LoginForm />
+      <MockAuthProvider>
+        <LoginForm />
+      </MockAuthProvider>
     </NextIntlClientProvider>
   )
 }
 
-describe('LoginForm', () => {
+describe('Auth flow (integration)', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    document.cookie = `${MOCK_SESSION_COOKIE}=; max-age=0`
   })
 
-  it('renders email and password fields', () => {
-    renderLoginForm()
-    expect(screen.getByLabelText(/email/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/password/i)).toBeInTheDocument()
-  })
-
-  it('calls signIn with email and password on submit', async () => {
+  it('signs in with any credentials and redirects to /dashboard', async () => {
     const user = userEvent.setup()
-    mockSignIn.mockResolvedValueOnce(undefined)
-    renderLoginForm()
+    renderAuthFlow()
 
-    await user.type(screen.getByLabelText(/email/i), 'test@example.com')
-    await user.type(screen.getByLabelText(/password/i), 'secret123')
+    await user.type(screen.getByLabelText(/email/i), 'cindy@example.com')
+    await user.type(screen.getByLabelText(/password/i), 'any-password')
     await user.click(screen.getByRole('button', { name: /sign in/i }))
 
     await waitFor(() => {
-      expect(mockSignIn).toHaveBeenCalledWith('test@example.com', 'secret123')
       expect(mockPush).toHaveBeenCalledWith('/dashboard')
     })
   })
 
-  it('shows error message when signIn throws', async () => {
+  it('sets the session cookie on sign in', async () => {
     const user = userEvent.setup()
-    mockSignIn.mockRejectedValueOnce(new Error('Invalid'))
-    renderLoginForm()
+    renderAuthFlow()
 
-    await user.type(screen.getByLabelText(/email/i), 'bad@example.com')
-    await user.type(screen.getByLabelText(/password/i), 'wrong')
+    await user.type(screen.getByLabelText(/email/i), 'cindy@example.com')
+    await user.type(screen.getByLabelText(/password/i), 'any-password')
     await user.click(screen.getByRole('button', { name: /sign in/i }))
 
     await waitFor(() => {
-      expect(screen.getByText(/invalid credentials/i)).toBeInTheDocument()
+      expect(document.cookie).toContain(MOCK_SESSION_COOKIE)
     })
   })
 })

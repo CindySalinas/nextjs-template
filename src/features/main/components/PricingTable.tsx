@@ -1,3 +1,4 @@
+import { Link } from '@/lib/i18n/navigation'
 import { Badge } from '@/ui/badge'
 import { buttonVariants } from '@/ui/button'
 import { Card } from '@/ui/card'
@@ -43,7 +44,7 @@ export function PricingTable() {
             <p className="mt-2 text-3xl font-bold">{plan.price}</p>
             <p className="text-muted-foreground mt-2 text-sm">{plan.description}</p>
             <div className="mt-6">
-              <a
+              <Link
                 href="/register"
                 className={buttonVariants({
                   variant: plan.popular ? 'default' : 'outline',
@@ -51,7 +52,7 @@ export function PricingTable() {
                 })}
               >
                 {plan.cta}
-              </a>
+              </Link>
             </div>
           </Card>
         ))}

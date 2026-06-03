@@ -1,35 +1,15 @@
 import '@/styles/globals.css'
 
-import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-
-import { MockAuthProvider } from '@/features/auth/providers/MockAuthProvider'
-import { JsonLd } from '@/shared/JsonLd'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
-export const metadata: Metadata = {
-  title: {
-    default: process.env.NEXT_PUBLIC_APP_NAME,
-    template: `%s | ${process.env.NEXT_PUBLIC_APP_NAME}`,
-  },
-  description: 'A production-ready Next.js boilerplate',
-}
-
+// Minimal root layout required by Next.js. Locale-specific providers and
+// the lang attribute are set in [locale]/layout.tsx.
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} font-sans antialiased`}>
-        <JsonLd
-          data={{
-            '@context': 'https://schema.org',
-            '@type': 'Organization',
-            name: process.env.NEXT_PUBLIC_APP_NAME,
-            url: process.env.NEXT_PUBLIC_APP_URL,
-          }}
-        />
-        <MockAuthProvider>{children}</MockAuthProvider>
-      </body>
+    <html suppressHydrationWarning>
+      <body className={`${inter.variable} font-sans antialiased`}>{children}</body>
     </html>
   )
 }

@@ -1,2 +1,13 @@
 #!/usr/bin/env sh
+
+# 1. Lint + format staged files
 pnpm exec lint-staged
+
+# 2. Run tests related to staged files only
+# Uses vitest --related to find tests that import the changed files.
+# Skips if no .ts/.tsx files are staged (e.g. docs-only commit).
+# Tradeoff: adds ~2-5s on average. Skip with: git commit --no-verify
+STAGED=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(ts|tsx)$' || true)
+if [ -n "$STAGED" ]; then
+  pnpm exec vitest related $STAGED --run --passWithNoTests
+fi

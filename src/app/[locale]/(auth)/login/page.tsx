@@ -1,8 +1,14 @@
 import type { Metadata } from 'next'
 
 import { LoginForm } from '@/features/auth'
+import { generatePageMetadata } from '@/lib/seo/metadata'
 
-export const metadata: Metadata = { title: 'Sign in' }
+export const metadata: Metadata = generatePageMetadata({
+  title: 'Sign in',
+  description: 'Sign in to your account.',
+  path: '/login',
+  noIndex: true,
+})
 
 export default function LoginPage() {
   return (

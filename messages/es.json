@@ -1,0 +1,31 @@
+{
+  "common": {
+    "loading": "Cargando...",
+    "error": "Algo salió mal",
+    "backToHome": "Volver al inicio"
+  },
+  "nav": {
+    "about": "Nosotros",
+    "pricing": "Precios",
+    "signIn": "Iniciar sesión"
+  },
+  "auth": {
+    "signIn": "Iniciar sesión",
+    "signingIn": "Iniciando sesión...",
+    "register": "Crear cuenta",
+    "creatingAccount": "Creando cuenta...",
+    "forgotPassword": "Olvidé mi contraseña",
+    "sendResetLink": "Enviar enlace de recuperación",
+    "sending": "Enviando...",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "fullName": "Nombre completo",
+    "noAccount": "¿Sin cuenta?",
+    "createOne": "Crear una",
+    "alreadyHaveAccount": "¿Ya tienes cuenta?",
+    "invalidCredentials": "Credenciales inválidas. Prueba con cualquier correo y contraseña.",
+    "resetSent": "Si ese correo existe, se ha enviado un enlace de recuperación.",
+    "backToSignIn": "Volver a iniciar sesión",
+    "forgotPasswordLink": "¿Olvidaste tu contraseña?"
+  }
+}

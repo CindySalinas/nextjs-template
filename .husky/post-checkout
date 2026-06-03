@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+
+# Detects lockfile changes when switching branches.
+# $1 = previous HEAD, $2 = new HEAD, $3 = 1 if branch checkout (0 if file checkout)
+PREV_HEAD=$1
+NEW_HEAD=$2
+IS_BRANCH_CHECKOUT=$3
+
+# Only act on branch checkouts, not file-level checkouts (git checkout -- file)
+if [ "$IS_BRANCH_CHECKOUT" = "1" ]; then
+  if git diff --name-only "$PREV_HEAD" "$NEW_HEAD" | grep -q "pnpm-lock.yaml"; then
+    echo "pnpm-lock.yaml changed — installing dependencies..."
+    pnpm install --ignore-scripts
+  fi
+fi

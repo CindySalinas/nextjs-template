@@ -111,15 +111,34 @@ export function MyComponent() {
 
 **Adding a language:**
 
-1. Copy `messages/en.json` → `messages/es.json` and translate the values
+1. Translate `messages/es.json` (already created as a template)
 2. Add the locale to `src/lib/i18n/routing.ts`:
 
 ```ts
 export const routing = defineRouting({
   locales: ['en', 'es'],
   defaultLocale: 'en',
+  localePrefix: 'as-needed', // /about stays English, /es/about becomes Spanish
 })
 ```
+
+The default locale (`en`) keeps its URLs without a prefix. Each new locale gets a prefix automatically (`/es/`, `/fr/`, etc.).
+
+**Lazy loading per namespace (when your translations grow large):**
+
+By default all namespaces load together. If you split into many namespaces and notice bundle size growing, you can load them per page:
+
+```ts
+// src/lib/i18n/request.ts
+return {
+  locale,
+  // Load only the namespaces each page needs by passing them from page params.
+  // For most projects the single messages file is fine.
+  messages: (await import(`../../../messages/${locale}.json`)).default,
+}
+```
+
+To load per namespace, use `createTranslator` with a custom loader or use next-intl's `getTranslations` at the page level — it will only load the requested namespace. This is a performance optimization worth considering once you have 5+ namespaces with hundreds of keys.
 
 ## Connecting Real Auth
 

@@ -1,6 +1,12 @@
-import Link from 'next/link'
+import type { Metadata } from 'next'
 
+import { Link } from '@/lib/i18n/navigation'
 import { buttonVariants } from '@/ui/button'
+
+export const metadata: Metadata = {
+  title: 'Page not found',
+  robots: { index: false, follow: false },
+}
 
 export default function NotFound() {
   return (
