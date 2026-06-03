@@ -2,7 +2,7 @@
  * Integration test: MockAuthProvider + LoginForm together.
  * Unlike the component test, this does NOT mock useAuthContext — it uses the
  * real provider to verify the full sign-in flow end-to-end in jsdom.
- * Only the navigation module is mocked because real routing requires a browser.
+ * Only navigation modules are mocked because real routing requires a browser.
  */
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
@@ -16,10 +16,16 @@ import { MOCK_SESSION_COOKIE } from '@/lib/auth/types'
 
 import messages from '../../messages/en.json'
 
-const mockPush = vi.fn()
+const mockReplace = vi.fn()
+
+// MockAuthProvider uses next/navigation for routing
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({ replace: mockReplace }),
+  useSearchParams: () => ({ get: () => null }),
+}))
 
 vi.mock('@/lib/i18n/navigation', () => ({
-  useRouter: () => ({ push: mockPush }),
+  useRouter: () => ({ push: vi.fn() }),
   Link: ({
     href,
     children,
@@ -56,7 +62,7 @@ describe('Auth flow (integration)', () => {
     await user.click(screen.getByRole('button', { name: /sign in/i }))
 
     await waitFor(() => {
-      expect(mockPush).toHaveBeenCalledWith('/dashboard')
+      expect(mockReplace).toHaveBeenCalledWith('/dashboard')
     })
   })
 

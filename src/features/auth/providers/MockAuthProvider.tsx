@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter, useSearchParams } from 'next/navigation'
 import { createContext, useCallback, useContext, useState } from 'react'
 
 import type { AuthUser, SessionState } from '@/lib/auth/types'
@@ -20,22 +21,36 @@ const MOCK_USER: AuthUser = {
 }
 
 export function MockAuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<AuthUser | null>(null)
+  const router = useRouter()
+  const searchParams = useSearchParams()
 
-  const signIn = useCallback(async (_email: string, _password: string) => {
-    // ⚠️ INSECURE MOCK — replace before production.
-    // This cookie is readable by JavaScript (no HttpOnly flag) and unencrypted.
-    // Real auth must set the session cookie server-side (Server Action or API route):
-    //   Set-Cookie: session=<token>; HttpOnly; Secure; SameSite=Lax; Path=/
-    // Never use document.cookie to store session tokens in production.
-    document.cookie = `${MOCK_SESSION_COOKIE}=mock-token; path=/`
-    setUser(MOCK_USER)
-  }, [])
+  // Initialize from cookie to prevent hydration flash on protected pages
+  const [user, setUser] = useState<AuthUser | null>(() => {
+    if (typeof document === 'undefined') return null
+    return document.cookie.includes(MOCK_SESSION_COOKIE) ? MOCK_USER : null
+  })
+
+  const signIn = useCallback(
+    async (_email: string, _password: string) => {
+      // ⚠️ INSECURE MOCK — replace before production.
+      // This cookie is readable by JavaScript (no HttpOnly flag) and unencrypted.
+      // Real auth must set cookies server-side: HttpOnly; Secure; SameSite=Lax; Path=/
+      document.cookie = `${MOCK_SESSION_COOKIE}=mock-token; path=/`
+      setUser(MOCK_USER)
+
+      // Validate ?from= to prevent open redirect
+      const from = searchParams.get('from') ?? ''
+      const destination = from.startsWith('/') && !from.startsWith('//') ? from : '/dashboard'
+      router.replace(destination)
+    },
+    [router, searchParams]
+  )
 
   const signOut = useCallback(async () => {
     document.cookie = `${MOCK_SESSION_COOKIE}=; path=/; max-age=0`
     setUser(null)
-  }, [])
+    router.replace('/login')
+  }, [router])
 
   return (
     <AuthContext.Provider value={{ user, isLoading: false, signIn, signOut }}>
