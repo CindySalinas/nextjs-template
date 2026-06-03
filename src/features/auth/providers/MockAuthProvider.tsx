@@ -23,7 +23,11 @@ export function MockAuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null)
 
   const signIn = useCallback(async (_email: string, _password: string) => {
-    // Replace with real auth logic
+    // ⚠️ INSECURE MOCK — replace before production.
+    // This cookie is readable by JavaScript (no HttpOnly flag) and unencrypted.
+    // Real auth must set the session cookie server-side (Server Action or API route):
+    //   Set-Cookie: session=<token>; HttpOnly; Secure; SameSite=Lax; Path=/
+    // Never use document.cookie to store session tokens in production.
     document.cookie = `${MOCK_SESSION_COOKIE}=mock-token; path=/`
     setUser(MOCK_USER)
   }, [])
