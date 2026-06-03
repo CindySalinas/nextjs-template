@@ -1,19 +1,7 @@
-'use client'
-
-import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
-
 import { useSession } from './useSession'
 
-export function useAuthGuard(redirectTo = '/login') {
-  const { user, isLoading } = useSession()
-  const router = useRouter()
-
-  useEffect(() => {
-    if (!isLoading && !user) {
-      router.replace(redirectTo)
-    }
-  }, [user, isLoading, router, redirectTo])
-
-  return { user, isLoading }
+// Route protection is handled by the middleware (src/middleware/auth.ts).
+// This hook exists for components that need to read the current user on protected pages.
+export function useAuthGuard() {
+  return useSession()
 }
