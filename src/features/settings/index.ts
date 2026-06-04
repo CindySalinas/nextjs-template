@@ -1,1 +1,1 @@
-export {}
+export { SettingsShell } from './components/SettingsShell'

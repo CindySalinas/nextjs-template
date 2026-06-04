@@ -1,3 +1,10 @@
+'use client'
+
+import { useAuthContext, useSession } from '@/features/auth'
+import { SettingsShell } from '@/features/settings'
+
 export default function SettingsPage() {
-  return <h1 className="text-2xl font-bold">Settings</h1>
+  const { user } = useSession()
+  const { signOut } = useAuthContext()
+  return <SettingsShell user={user} signOut={signOut} />
 }
