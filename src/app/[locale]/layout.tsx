@@ -5,6 +5,7 @@ import { getMessages, setRequestLocale } from 'next-intl/server'
 import { MockAuthProvider } from '@/features/auth/providers/MockAuthProvider'
 import { routing } from '@/lib/i18n/routing'
 import { JsonLd } from '@/shared/JsonLd'
+import { Toaster } from '@/ui/sonner'
 
 const appName = process.env.NEXT_PUBLIC_APP_NAME ?? 'My App'
 const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
@@ -63,6 +64,7 @@ export default async function LocaleLayout({
       <NextIntlClientProvider messages={messages}>
         <MockAuthProvider>{children}</MockAuthProvider>
       </NextIntlClientProvider>
+      <Toaster position="bottom-right" richColors />
     </>
   )
 }

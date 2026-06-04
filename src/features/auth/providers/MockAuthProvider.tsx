@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation'
 import { createContext, useCallback, useContext, useState } from 'react'
+import { toast } from 'sonner'
 
 import type { AuthUser, SessionState } from '@/lib/auth/types'
 import { MOCK_SESSION_COOKIE } from '@/lib/auth/types'
@@ -37,6 +38,7 @@ export function MockAuthProvider({ children }: { children: React.ReactNode }) {
       // Real auth must set cookies server-side: HttpOnly; Secure; SameSite=Lax; Path=/
       document.cookie = `${MOCK_SESSION_COOKIE}=mock-token; path=/`
       setUser(MOCK_USER)
+      toast.success('Signed in successfully')
 
       // Validate ?from= to prevent open redirect
       const from = searchParams.get('from') ?? ''
@@ -49,6 +51,7 @@ export function MockAuthProvider({ children }: { children: React.ReactNode }) {
   const signOut = useCallback(async () => {
     document.cookie = `${MOCK_SESSION_COOKIE}=; path=/; max-age=0`
     setUser(null)
+    toast.success('Signed out')
     router.replace('/login')
   }, [router])
 
