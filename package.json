@@ -21,6 +21,20 @@
     "docker:run": "docker run -p 3000:3000 --env-file .env.local nextjs-template",
     "setup": "tsx scripts/setup.ts"
   },
+  "pnpm": {
+    "allowBuilds": {
+      "@parcel/watcher": true,
+      "@swc/core": true,
+      "esbuild": true,
+      "msw": true,
+      "sharp": true,
+      "unrs-resolver": true
+    },
+    "ignoredBuiltDependencies": [
+      "sharp",
+      "unrs-resolver"
+    ]
+  },
   "lint-staged": {
     "*.{ts,tsx}": [
       "eslint --fix",
