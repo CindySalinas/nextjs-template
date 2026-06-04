@@ -28,6 +28,11 @@
     "backToSignIn": "Volver a iniciar sesión",
     "forgotPasswordLink": "¿Olvidaste tu contraseña?"
   },
+  "notFound": {
+    "title": "Página no encontrada",
+    "description": "La página que buscas no existe.",
+    "backHome": "Volver al inicio"
+  },
   "meta": {
     "home": {
       "title": "Construye tu próximo producto más rápido",

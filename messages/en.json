@@ -28,6 +28,11 @@
     "backToSignIn": "Back to sign in",
     "forgotPasswordLink": "Forgot password?"
   },
+  "notFound": {
+    "title": "Page not found",
+    "description": "The page you're looking for doesn't exist.",
+    "backHome": "Go home"
+  },
   "meta": {
     "home": {
       "title": "Build your next product faster",
