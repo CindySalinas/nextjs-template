@@ -18,8 +18,14 @@ jobs:
       - uses: pnpm/action-setup@v6
         with: { version: '9' }
       - uses: actions/setup-node@v6
-        with: { node-version: 24, cache: pnpm, cache-dependency-path: pnpm-lock.yaml }
-      - run: pnpm install --frozen-lockfile --ignore-scripts --prefer-offline
+        with: { node-version: 24 }
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/share/pnpm/store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-pnpm-
+      - run: pnpm install --frozen-lockfile --ignore-scripts
       - run: pnpm exec tsc --noEmit
 
   lint:
@@ -30,8 +36,14 @@ jobs:
       - uses: pnpm/action-setup@v6
         with: { version: '9' }
       - uses: actions/setup-node@v6
-        with: { node-version: 24, cache: pnpm, cache-dependency-path: pnpm-lock.yaml }
-      - run: pnpm install --frozen-lockfile --ignore-scripts --prefer-offline
+        with: { node-version: 24 }
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/share/pnpm/store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-pnpm-
+      - run: pnpm install --frozen-lockfile --ignore-scripts
       - run: pnpm lint
       - run: pnpm format:check
 
@@ -43,8 +55,14 @@ jobs:
       - uses: pnpm/action-setup@v6
         with: { version: '9' }
       - uses: actions/setup-node@v6
-        with: { node-version: 24, cache: pnpm, cache-dependency-path: pnpm-lock.yaml }
-      - run: pnpm install --frozen-lockfile --ignore-scripts --prefer-offline
+        with: { node-version: 24 }
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/share/pnpm/store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-pnpm-
+      - run: pnpm install --frozen-lockfile --ignore-scripts
       - run: pnpm test:coverage
 
   build:
@@ -56,8 +74,14 @@ jobs:
       - uses: pnpm/action-setup@v6
         with: { version: '9' }
       - uses: actions/setup-node@v6
-        with: { node-version: 24, cache: pnpm, cache-dependency-path: pnpm-lock.yaml }
-      - run: pnpm install --frozen-lockfile --ignore-scripts --prefer-offline
+        with: { node-version: 24 }
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/share/pnpm/store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-pnpm-
+      - run: pnpm install --frozen-lockfile --ignore-scripts
       - run: pnpm build
         env:
           NEXT_PUBLIC_APP_URL: https://example.com
@@ -72,6 +96,12 @@ jobs:
       - uses: pnpm/action-setup@v6
         with: { version: '9' }
       - uses: actions/setup-node@v6
-        with: { node-version: 24, cache: pnpm, cache-dependency-path: pnpm-lock.yaml }
-      - run: pnpm install --frozen-lockfile --ignore-scripts --prefer-offline
+        with: { node-version: 24 }
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/share/pnpm/store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-pnpm-
+      - run: pnpm install --frozen-lockfile --ignore-scripts
       - run: pnpm audit --audit-level=moderate

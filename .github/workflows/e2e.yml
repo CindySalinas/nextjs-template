@@ -17,8 +17,14 @@ jobs:
       - uses: pnpm/action-setup@v6
         with: { version: '9' }
       - uses: actions/setup-node@v6
-        with: { node-version: 24, cache: pnpm, cache-dependency-path: pnpm-lock.yaml }
-      - run: pnpm install --frozen-lockfile --ignore-scripts --prefer-offline
+        with: { node-version: 24 }
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/share/pnpm/store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-pnpm-
+      - run: pnpm install --frozen-lockfile --ignore-scripts
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm build
         env:
