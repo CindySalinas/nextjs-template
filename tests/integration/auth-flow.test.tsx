@@ -12,7 +12,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { LoginForm } from '@/features/auth/components/LoginForm'
 import { MockAuthProvider } from '@/features/auth/providers/MockAuthProvider'
-import { MOCK_SESSION_COOKIE } from '@/lib/auth/types'
+import { MOCK_JWT_TOKEN } from '@/lib/auth/types'
 
 import messages from '../../messages/en.json'
 
@@ -50,7 +50,7 @@ function renderAuthFlow() {
 describe('Auth flow (integration)', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    document.cookie = `${MOCK_SESSION_COOKIE}=; max-age=0`
+    localStorage.clear()
   })
 
   it('signs in with any credentials and redirects to /dashboard', async () => {
@@ -66,7 +66,7 @@ describe('Auth flow (integration)', () => {
     })
   })
 
-  it('sets the session cookie on sign in', async () => {
+  it('sets the JWT in localStorage on sign in', async () => {
     const user = userEvent.setup()
     renderAuthFlow()
 
@@ -75,7 +75,7 @@ describe('Auth flow (integration)', () => {
     await user.click(screen.getByRole('button', { name: /sign in/i }))
 
     await waitFor(() => {
-      expect(document.cookie).toContain(MOCK_SESSION_COOKIE)
+      expect(localStorage.getItem(MOCK_JWT_TOKEN)).not.toBeNull()
     })
   })
 })

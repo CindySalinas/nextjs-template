@@ -1,8 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-// Mock next/navigation BEFORE importing MockAuthProvider
 const mockReplace = vi.fn()
 let mockSearchParamsValue: Record<string, string> = {}
 
@@ -15,6 +14,7 @@ vi.mock('next/navigation', () => ({
 }))
 
 import { MockAuthProvider, useAuthContext } from '@/features/auth/providers/MockAuthProvider'
+import { MOCK_JWT, MOCK_JWT_TOKEN } from '@/lib/auth/types'
 
 function TestConsumer() {
   const { user, signIn, signOut } = useAuthContext()
@@ -38,17 +38,21 @@ function renderProvider() {
 beforeEach(() => {
   vi.clearAllMocks()
   mockSearchParamsValue = {}
-  document.cookie = 'mock-session=; path=/; max-age=0'
+  localStorage.clear()
+})
+
+afterEach(() => {
+  localStorage.clear()
 })
 
 describe('MockAuthProvider', () => {
-  it('initializes as null when no session cookie is present', () => {
+  it('initializes as null when no token is in localStorage', () => {
     renderProvider()
     expect(screen.getByTestId('user').textContent).toBe('null')
   })
 
-  it('initializes user from existing session cookie', () => {
-    document.cookie = 'mock-session=mock-token; path=/'
+  it('initializes user from existing token in localStorage', () => {
+    localStorage.setItem(MOCK_JWT_TOKEN, MOCK_JWT)
     renderProvider()
     expect(screen.getByTestId('user').textContent).toBe('Demo User')
   })
@@ -80,11 +84,24 @@ describe('MockAuthProvider', () => {
     expect(mockReplace).toHaveBeenCalledWith('/dashboard')
   })
 
+  it('stores the JWT in localStorage on sign in', async () => {
+    renderProvider()
+    await userEvent.click(screen.getByText('Sign In'))
+    expect(localStorage.getItem(MOCK_JWT_TOKEN)).toBe(MOCK_JWT)
+  })
+
   it('redirects to /login and clears user on sign out', async () => {
-    document.cookie = 'mock-session=mock-token; path=/'
+    localStorage.setItem(MOCK_JWT_TOKEN, MOCK_JWT)
     renderProvider()
     await userEvent.click(screen.getByText('Sign Out'))
     expect(mockReplace).toHaveBeenCalledWith('/login')
     expect(screen.getByTestId('user').textContent).toBe('null')
+  })
+
+  it('removes the JWT from localStorage on sign out', async () => {
+    localStorage.setItem(MOCK_JWT_TOKEN, MOCK_JWT)
+    renderProvider()
+    await userEvent.click(screen.getByText('Sign Out'))
+    expect(localStorage.getItem(MOCK_JWT_TOKEN)).toBeNull()
   })
 })
