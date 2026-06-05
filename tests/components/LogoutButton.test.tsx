@@ -18,7 +18,8 @@ describe('LogoutButton', () => {
     await user.click(screen.getByRole('button', { name: /sign out/i }))
 
     expect(screen.getByRole('alertdialog')).toBeInTheDocument()
-    expect(screen.getByText(/sign out\?/i)).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /sign out\?/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /cancel/i })).toBeInTheDocument()
   })
 
   it('calls signOut when confirming the dialog', async () => {

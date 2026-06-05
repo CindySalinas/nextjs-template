@@ -57,7 +57,11 @@ export function LoginForm() {
           required
         />
       </div>
-      {error && <p className="text-destructive text-sm">{error}</p>}
+      {error && (
+        <p role="alert" className="text-destructive text-sm">
+          {error}
+        </p>
+      )}
       <Button type="submit" disabled={isLoading} className="w-full">
         {isLoading ? (
           <span className="flex items-center gap-2">

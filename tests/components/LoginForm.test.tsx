@@ -73,4 +73,33 @@ describe('LoginForm', () => {
       expect(screen.getByText(/invalid credentials/i)).toBeInTheDocument()
     })
   })
+
+  it('announces error message to screen readers via role="alert"', async () => {
+    const user = userEvent.setup()
+    mockSignIn.mockRejectedValueOnce(new Error('Invalid'))
+    renderLoginForm()
+
+    await user.type(screen.getByLabelText(/email/i), 'bad@example.com')
+    await user.type(screen.getByLabelText(/password/i), 'wrong')
+    await user.click(screen.getByRole('button', { name: /sign in/i }))
+
+    await waitFor(() => {
+      expect(screen.getByRole('alert')).toBeInTheDocument()
+      expect(screen.getByRole('alert')).toHaveTextContent(/invalid credentials/i)
+    })
+  })
+
+  it('has an email input associated with a label', () => {
+    renderLoginForm()
+    const emailInput = screen.getByLabelText(/email/i)
+    expect(emailInput).toHaveAttribute('type', 'email')
+    expect(emailInput).toHaveAttribute('id', 'email')
+  })
+
+  it('has a password input associated with a label', () => {
+    renderLoginForm()
+    const passwordInput = screen.getByLabelText(/password/i)
+    expect(passwordInput).toHaveAttribute('type', 'password')
+    expect(passwordInput).toHaveAttribute('id', 'password')
+  })
 })
