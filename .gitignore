@@ -48,3 +48,6 @@ next-env.d.ts
 # AI assistant tooling
 .superpowers/
 AGENTS.md
+
+# Storybook
+storybook-static/
