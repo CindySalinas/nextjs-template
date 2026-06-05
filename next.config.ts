@@ -23,8 +23,6 @@ const securityHeaders = [
   // Cross-origin isolation headers
   { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
   { key: 'Cross-Origin-Resource-Policy', value: 'same-origin' },
-  // credentialless (not require-corp) — allows Google Fonts + other CDNs without CORP headers
-  { key: 'Cross-Origin-Embedder-Policy', value: 'credentialless' },
   // Content-Security-Policy is intentionally absent here.
   // It requires a per-request nonce and is set dynamically in src/proxy.ts.
   // Setting it here would send two CSP headers — browsers enforce both, breaking the nonce approach.

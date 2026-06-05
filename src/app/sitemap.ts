@@ -2,8 +2,6 @@ import type { MetadataRoute } from 'next'
 
 import { routing } from '@/lib/i18n/routing'
 
-const LAST_MODIFIED = new Date('2026-01-01')
-
 const EXCLUDED_ROUTES = ['/dashboard', '/settings', '/login', '/register', '/forgot-password']
 
 function resolveLocalePath(
@@ -43,7 +41,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
       return {
         url,
-        lastModified: LAST_MODIFIED,
+        lastModified: new Date(),
         changeFrequency: 'monthly' as const,
         priority: route === '/' ? 1 : 0.8,
         alternates: { languages: alternates },
