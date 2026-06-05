@@ -8,7 +8,7 @@ test.describe('Home page', () => {
 
   test('has working navigation links', async ({ page }) => {
     await page.goto('/')
-    await page.getByRole('link', { name: /pricing/i }).click()
+    await page.getByRole('link', { name: 'Pricing', exact: true }).click()
     await expect(page).toHaveURL('/pricing')
   })
 
