@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/nextjs'
 
 import {
   AlertDialog,
@@ -24,7 +24,7 @@ type Story = StoryObj
 export const Default: Story = {
   render: () => (
     <AlertDialog>
-      <AlertDialogTrigger asChild>
+      <AlertDialogTrigger>
         <Button variant="destructive">Delete account</Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
