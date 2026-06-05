@@ -10,7 +10,14 @@ import unusedImports from 'eslint-plugin-unused-imports'
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
-  globalIgnores(['.next/**', 'out/**', 'build/**', 'coverage/**', 'next-env.d.ts', 'storybook-static/**']),
+  globalIgnores([
+    '.next/**',
+    'out/**',
+    'build/**',
+    'coverage/**',
+    'next-env.d.ts',
+    'storybook-static/**',
+  ]),
   {
     plugins: {
       boundaries,
