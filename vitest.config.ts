@@ -26,7 +26,7 @@ export default defineConfig({
         'src/components/shared/**',
         'src/middleware/**',
       ],
-      exclude: ['src/lib/i18n/navigation.ts', '**/*.d.ts', '**/index.ts'],
+      exclude: ['src/lib/i18n/navigation.ts', '**/*.d.ts', '**/index.ts', '**/*.stories.tsx'],
       thresholds: {
         statements: 70,
         branches: 60,
