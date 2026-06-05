@@ -1,3 +1,43 @@
+# [1.1.0](https://github.com/CindySalinas/nextjs-template/compare/v1.0.0...v1.1.0) (2026-06-05)
+
+
+### Bug Fixes
+
+* **ci:** move pnpm allowBuilds config to package.json, remove pnpm-workspace.yaml ([736131f](https://github.com/CindySalinas/nextjs-template/commit/736131f36c2d86514de792caf4893e83839195c8))
+* **coverage:** exclude .stories.tsx files from coverage report ([6874f40](https://github.com/CindySalinas/nextjs-template/commit/6874f40714d71dd612206301edd7de9e1baf60c6))
+* **e2e:** exclude /api routes from intl proxy and tighten pricing link selector ([c4fa91d](https://github.com/CindySalinas/nextjs-template/commit/c4fa91d5d709d5b7411bca15f66685f2d685ecb3))
+* **e2e:** limit CI browsers to chromium and skip mobile nav test ([7f89efa](https://github.com/CindySalinas/nextjs-template/commit/7f89efa494a961eefa06288e0f59adfea435d2b2))
+* **security:** override postcss >=8.5.10 via pnpm-workspace.yaml to patch XSS CVE ([558e4e1](https://github.com/CindySalinas/nextjs-template/commit/558e4e1727bce083af3eb4fba868fe8b3a87e5ad))
+* **security:** postcss CVE unfixable via next@16 — add audit --ignore-unfixable ([233552c](https://github.com/CindySalinas/nextjs-template/commit/233552c1769148339ed83d960d61831a21d4058f))
+* **sentry:** replace deprecated disableLogger with webpack.treeshake.removeDebugLogging ([c256fa7](https://github.com/CindySalinas/nextjs-template/commit/c256fa7492148712ef03818c631d327169fdd8b9))
+* **storybook:** use @storybook/nextjs imports and remove invalid asChild prop ([efa3979](https://github.com/CindySalinas/nextjs-template/commit/efa3979b6b978410e4edfd69dd97b3e9d931560c))
+
+
+### Features
+
+* add Sentry monitoring (errors + performance, standard plan) ([940dc54](https://github.com/CindySalinas/nextjs-template/commit/940dc54118c7e2196626dc0fc582f51343a62903))
+* **auth:** add localStorage token storage module with SSR guard ([99f9b85](https://github.com/CindySalinas/nextjs-template/commit/99f9b85073ef471d7c769e07e34f6762e90aa486))
+* **auth:** add logout button with confirmation dialog to protected sidebar ([1e062ce](https://github.com/CindySalinas/nextjs-template/commit/1e062cee5a4c5bfc864365ab248515b25c850eb2))
+* **auth:** authMiddleware with cookie check, locale stripping, open-redirect-safe ?from= ([f91ac49](https://github.com/CindySalinas/nextjs-template/commit/f91ac49a9a63fdd7b3c61737c583d6e3cbca153c))
+* **auth:** MockAuthProvider — cookie init, open-redirect validation, router.replace on signOut ([f23c0f0](https://github.com/CindySalinas/nextjs-template/commit/f23c0f03f568cf0c9e3dee445d079e0a93b3e82c))
+* **auth:** move route protection to client via useAuthGuard redirect ([19c84c2](https://github.com/CindySalinas/nextjs-template/commit/19c84c2c88b26b618ca3f71cf8931213cb4ea1f2))
+* **auth:** replace document.cookie with localStorage token storage in MockAuthProvider ([a461b74](https://github.com/CindySalinas/nextjs-template/commit/a461b7465947f9d8695ebfdb6019abce66db25ca))
+* **i18n:** add meta translation namespace for marketing pages ([53b9a54](https://github.com/CindySalinas/nextjs-template/commit/53b9a5451b7f207ddd2d67014af4afae0b5dc38c))
+* **i18n:** add notFound translation namespace ([923ec98](https://github.com/CindySalinas/nextjs-template/commit/923ec98c37f451513f79b9f3a4965383b840e1e6))
+* **security:** add safeAction wrapper and Zod auth schemas in src/lib/validations/ ([23bae02](https://github.com/CindySalinas/nextjs-template/commit/23bae022ac086c1081b53b5b518e515fd6695e27))
+* **security:** HSTS, COOP/CORP/COEP, expanded Permissions-Policy, remove X-Frame-Options ([3cecdbb](https://github.com/CindySalinas/nextjs-template/commit/3cecdbbc3e4136ff2f579675208495fd49190bbe))
+* **security:** nonce-based CSP in proxy.ts — removes unsafe-inline from script-src ([d0d5b9b](https://github.com/CindySalinas/nextjs-template/commit/d0d5b9b62ea74f12b388697e14b6f7c5c774b5c6))
+* **security:** read nonce from x-nonce header, add conditional GA with nonce ([52205e3](https://github.com/CindySalinas/nextjs-template/commit/52205e367c217ad80f3c0324e3ba06097661b7da))
+* **security:** separate env runtime validation from .d.ts into src/lib/env.ts ([ac9a419](https://github.com/CindySalinas/nextjs-template/commit/ac9a419f94d111e967aaeb11537dc3f552b10b03))
+* **seo:** async generateMetadata + ISR revalidate=86400 for all marketing and auth pages ([79d477e](https://github.com/CindySalinas/nextjs-template/commit/79d477edfd09610a548f1fc6453aee58f59b8ae7))
+* **seo:** locale-aware generatePageMetadata — locale + alternateUrls replace locales[] ([774c9df](https://github.com/CindySalinas/nextjs-template/commit/774c9df0b607f893457ecf8ff600b7ae5e73d598))
+* **seo:** rewrite sitemap — derived from routing.pathnames, 6 entries with hreflang alternates ([6416c94](https://github.com/CindySalinas/nextjs-template/commit/6416c9402309a5aacd7457d7965d617d86a331f0))
+* **ux:** add error boundaries with glassmorphism design for all route groups ([5e98465](https://github.com/CindySalinas/nextjs-template/commit/5e984658c8a45ce67bb7853cff21ff799fc4f240))
+* **ux:** add loading spinner for (main)/(auth) and skeleton for (protected) route groups ([582d80d](https://github.com/CindySalinas/nextjs-template/commit/582d80d6567d997423dfc60fb58eed079fec0edf))
+* **ux:** EmptyState, DashboardShell stats prop, SettingsShell, settings page wiring ([5218e5a](https://github.com/CindySalinas/nextjs-template/commit/5218e5a6162de5ed657428e6afedb258d3845bfa))
+* **ux:** locale 404 with getTranslations + gradient design; root fallback 404 ([8b58f63](https://github.com/CindySalinas/nextjs-template/commit/8b58f631d135514aec1b8b54370997036bcff59c))
+* **ux:** Toaster in locale layout, toast feedback on signIn/signOut, button loading spinners ([3659fef](https://github.com/CindySalinas/nextjs-template/commit/3659fefc7d13af19a638f1e0d287e3c22f37c0ff))
+
 # 1.0.0 (2026-06-04)
 
 
