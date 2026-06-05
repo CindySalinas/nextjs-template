@@ -6,6 +6,7 @@ const envSchema = z.object({
   NEXT_PUBLIC_APP_NAME: z.string().default('My App'),
   NEXT_PUBLIC_TWITTER_HANDLE: z.string().optional(),
   NEXT_PUBLIC_GA_MEASUREMENT_ID: z.string().optional(),
+  NEXT_PUBLIC_SENTRY_DSN: z.string().url().optional(),
 })
 
 const parsed = envSchema.safeParse(process.env)
