@@ -8,7 +8,7 @@ import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { NextIntlClientProvider } from 'next-intl'
 import React from 'react'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { LoginForm } from '@/features/auth/components/LoginForm'
 import { MockAuthProvider } from '@/features/auth/providers/MockAuthProvider'
@@ -18,7 +18,6 @@ import messages from '../../messages/en.json'
 
 const mockReplace = vi.fn()
 
-// MockAuthProvider uses next/navigation for routing
 vi.mock('next/navigation', () => ({
   useRouter: () => ({ replace: mockReplace }),
   useSearchParams: () => ({ get: () => null }),
@@ -53,6 +52,10 @@ describe('Auth flow (integration)', () => {
     localStorage.clear()
   })
 
+  afterEach(() => {
+    localStorage.clear()
+  })
+
   it('signs in with any credentials and redirects to /dashboard', async () => {
     const user = userEvent.setup()
     renderAuthFlow()
@@ -66,7 +69,7 @@ describe('Auth flow (integration)', () => {
     })
   })
 
-  it('sets the JWT in localStorage on sign in', async () => {
+  it('stores the JWT in localStorage on sign in', async () => {
     const user = userEvent.setup()
     renderAuthFlow()
 
