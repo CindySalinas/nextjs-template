@@ -5,67 +5,24 @@ import { authMiddleware } from '@/middleware/auth'
 
 const locales = ['en', 'es']
 
-function makeRequest(pathname: string, withCookie = false): NextRequest {
-  const url = `http://localhost${pathname}`
-  const headers = new Headers()
-  if (withCookie) {
-    headers.set('cookie', 'mock-session=mock-token')
-  }
-  return new NextRequest(url, { headers })
+function makeRequest(pathname: string): NextRequest {
+  return new NextRequest(`http://localhost${pathname}`)
 }
 
 describe('authMiddleware', () => {
-  it('redirects unauthenticated user from protected route to /login?from=...', () => {
-    const req = makeRequest('/dashboard', false)
-    const res = authMiddleware(req, locales)
-
-    expect(res).not.toBeNull()
-    expect(res?.status).toBe(307)
-    const location = res?.headers.get('location') ?? ''
-    expect(location).toContain('/login')
-    expect(location).toContain('from=%2Fdashboard')
+  it('returns null for protected routes (auth guard is client-side)', () => {
+    expect(authMiddleware(makeRequest('/dashboard'), locales)).toBeNull()
+    expect(authMiddleware(makeRequest('/settings'), locales)).toBeNull()
+    expect(authMiddleware(makeRequest('/es/dashboard'), locales)).toBeNull()
   })
 
-  it('strips locale prefix before protected route check', () => {
-    const req = makeRequest('/es/settings', false)
-    const res = authMiddleware(req, locales)
-
-    expect(res).not.toBeNull()
-    expect(res?.status).toBe(307)
-    const location = res?.headers.get('location') ?? ''
-    expect(location).toContain('/login')
-    expect(location).toContain('from=')
+  it('returns null for auth routes', () => {
+    expect(authMiddleware(makeRequest('/login'), locales)).toBeNull()
+    expect(authMiddleware(makeRequest('/register'), locales)).toBeNull()
   })
 
-  it('redirects authenticated user from auth route to /dashboard', () => {
-    const req = makeRequest('/login', true)
-    const res = authMiddleware(req, locales)
-
-    expect(res).not.toBeNull()
-    expect(res?.status).toBe(307)
-    const location = res?.headers.get('location') ?? ''
-    expect(location).toContain('/dashboard')
-    expect(location).not.toContain('from=')
-  })
-
-  it('returns null for unauthenticated user on public route', () => {
-    const req = makeRequest('/about', false)
-    const res = authMiddleware(req, locales)
-
-    expect(res).toBeNull()
-  })
-
-  it('returns null for authenticated user on protected route', () => {
-    const req = makeRequest('/dashboard', true)
-    const res = authMiddleware(req, locales)
-
-    expect(res).toBeNull()
-  })
-
-  it('returns null for unauthenticated user on locale-prefixed public route', () => {
-    const req = makeRequest('/es/sobre', false)
-    const res = authMiddleware(req, locales)
-
-    expect(res).toBeNull()
+  it('returns null for public routes', () => {
+    expect(authMiddleware(makeRequest('/about'), locales)).toBeNull()
+    expect(authMiddleware(makeRequest('/es/sobre'), locales)).toBeNull()
   })
 })
