@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, setRequestLocale } from 'next-intl/server'
 
-import { MockAuthProvider } from '@/features/auth/providers/MockAuthProvider'
 import { routing } from '@/lib/i18n/routing'
 import { JsonLd } from '@/shared/JsonLd'
 import { Toaster } from '@/ui/sonner'
@@ -54,16 +53,10 @@ export default async function LocaleLayout({
             '@type': 'ImageObject',
             url: `${appUrl}/og-image.png`,
           },
-          sameAs: [
-            // Add your social media profile URLs here:
-            // 'https://twitter.com/yourhandle',
-            // 'https://github.com/yourorg',
-          ],
+          sameAs: [],
         }}
       />
-      <NextIntlClientProvider messages={messages}>
-        <MockAuthProvider>{children}</MockAuthProvider>
-      </NextIntlClientProvider>
+      <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
       <Toaster position="bottom-right" richColors />
     </>
   )
