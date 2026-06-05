@@ -3,6 +3,8 @@ packages:
 
 allowBuilds:
   '@sentry/cli': true
+  core-js-pure: set this to true or false
+  esbuild: set this to true or false
 
 overrides:
   postcss: '>=8.5.10'
