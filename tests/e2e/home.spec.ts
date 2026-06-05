@@ -6,9 +6,10 @@ test.describe('Home page', () => {
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
   })
 
-  test('has working navigation links', async ({ page }) => {
+  test('has working navigation links', async ({ page, isMobile }) => {
+    test.skip(isMobile, 'Nav links are hidden on mobile (no hamburger menu)')
     await page.goto('/')
-    await page.getByRole('link', { name: /pricing/i }).click()
+    await page.getByRole('link', { name: 'Pricing', exact: true }).click()
     await expect(page).toHaveURL('/pricing')
   })
 

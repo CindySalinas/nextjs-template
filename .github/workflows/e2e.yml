@@ -4,22 +4,33 @@ on:
   pull_request:
     branches: [main]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   e2e:
     name: Playwright E2E
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with: { version: latest }
-      - uses: actions/setup-node@v4
-        with: { node-version: 22, cache: pnpm }
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v6
+        with: { version: '11' }
+      - uses: actions/setup-node@v6
+        with: { node-version: 24 }
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/share/pnpm/store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-pnpm-
       - run: pnpm install --frozen-lockfile --ignore-scripts
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm build
         env:
           NEXT_PUBLIC_APP_URL: http://localhost:3000
           NEXT_PUBLIC_APP_NAME: My App
+          NEXT_TELEMETRY_DISABLED: 1
       - run: pnpm test:e2e
         env:
           CI: true

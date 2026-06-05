@@ -2,24 +2,29 @@
  * Integration test: MockAuthProvider + LoginForm together.
  * Unlike the component test, this does NOT mock useAuthContext — it uses the
  * real provider to verify the full sign-in flow end-to-end in jsdom.
- * Only the navigation module is mocked because real routing requires a browser.
+ * Only navigation modules are mocked because real routing requires a browser.
  */
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { NextIntlClientProvider } from 'next-intl'
 import React from 'react'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { LoginForm } from '@/features/auth/components/LoginForm'
 import { MockAuthProvider } from '@/features/auth/providers/MockAuthProvider'
-import { MOCK_SESSION_COOKIE } from '@/lib/auth/types'
+import { MOCK_JWT_TOKEN } from '@/lib/auth/types'
 
 import messages from '../../messages/en.json'
 
-const mockPush = vi.fn()
+const mockReplace = vi.fn()
+
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({ replace: mockReplace }),
+  useSearchParams: () => ({ get: () => null }),
+}))
 
 vi.mock('@/lib/i18n/navigation', () => ({
-  useRouter: () => ({ push: mockPush }),
+  useRouter: () => ({ push: vi.fn() }),
   Link: ({
     href,
     children,
@@ -44,7 +49,11 @@ function renderAuthFlow() {
 describe('Auth flow (integration)', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    document.cookie = `${MOCK_SESSION_COOKIE}=; max-age=0`
+    localStorage.clear()
+  })
+
+  afterEach(() => {
+    localStorage.clear()
   })
 
   it('signs in with any credentials and redirects to /dashboard', async () => {
@@ -56,11 +65,11 @@ describe('Auth flow (integration)', () => {
     await user.click(screen.getByRole('button', { name: /sign in/i }))
 
     await waitFor(() => {
-      expect(mockPush).toHaveBeenCalledWith('/dashboard')
+      expect(mockReplace).toHaveBeenCalledWith('/dashboard')
     })
   })
 
-  it('sets the session cookie on sign in', async () => {
+  it('stores the JWT in localStorage on sign in', async () => {
     const user = userEvent.setup()
     renderAuthFlow()
 
@@ -69,7 +78,7 @@ describe('Auth flow (integration)', () => {
     await user.click(screen.getByRole('button', { name: /sign in/i }))
 
     await waitFor(() => {
-      expect(document.cookie).toContain(MOCK_SESSION_COOKIE)
+      expect(localStorage.getItem(MOCK_JWT_TOKEN)).not.toBeNull()
     })
   })
 })

@@ -1,9 +1,12 @@
 'use client'
 
+import { useRouter, useSearchParams } from 'next/navigation'
 import { createContext, useCallback, useContext, useState } from 'react'
+import { toast } from 'sonner'
 
+import { getToken, removeToken, setToken } from '@/lib/auth/storage'
 import type { AuthUser, SessionState } from '@/lib/auth/types'
-import { MOCK_SESSION_COOKIE } from '@/lib/auth/types'
+import { MOCK_JWT } from '@/lib/auth/types'
 
 interface AuthContextValue extends SessionState {
   signIn: (email: string, password: string) => Promise<void>
@@ -20,18 +23,30 @@ const MOCK_USER: AuthUser = {
 }
 
 export function MockAuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<AuthUser | null>(null)
+  const router = useRouter()
+  const searchParams = useSearchParams()
 
-  const signIn = useCallback(async (_email: string, _password: string) => {
-    // Replace with real auth logic
-    document.cookie = `${MOCK_SESSION_COOKIE}=mock-token; path=/`
-    setUser(MOCK_USER)
-  }, [])
+  const [user, setUser] = useState<AuthUser | null>(() => (getToken() ? MOCK_USER : null))
+
+  const signIn = useCallback(
+    async (_email: string, _password: string) => {
+      setToken(MOCK_JWT)
+      setUser(MOCK_USER)
+      toast.success('Signed in successfully')
+
+      const from = searchParams.get('from') ?? ''
+      const destination = from.startsWith('/') && !from.startsWith('//') ? from : '/dashboard'
+      router.replace(destination)
+    },
+    [router, searchParams]
+  )
 
   const signOut = useCallback(async () => {
-    document.cookie = `${MOCK_SESSION_COOKIE}=; path=/; max-age=0`
+    removeToken()
     setUser(null)
-  }, [])
+    toast.success('Signed out')
+    router.replace('/login')
+  }, [router])
 
   return (
     <AuthContext.Provider value={{ user, isLoading: false, signIn, signOut }}>

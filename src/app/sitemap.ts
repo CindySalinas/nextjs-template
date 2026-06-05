@@ -1,25 +1,51 @@
 import type { MetadataRoute } from 'next'
 
-// Use a fixed date — new Date() would vary per request and break HTTP caching.
-// Update this when you publish significant content changes.
-const LAST_MODIFIED = new Date('2026-01-01')
+import { routing } from '@/lib/i18n/routing'
+
+const EXCLUDED_ROUTES = ['/dashboard', '/settings', '/login', '/register', '/forgot-password']
+
+function resolveLocalePath(
+  pathname: string,
+  locale: string,
+  pathnames: typeof routing.pathnames
+): string {
+  const entry = pathnames[pathname as keyof typeof pathnames]
+  if (!entry) return pathname
+  if (typeof entry === 'string') return entry
+  // eslint-disable-next-line security/detect-object-injection
+  return (entry as Record<string, string>)[locale] ?? pathname
+}
+
+function buildUrl(baseUrl: string, locale: string, localizedPath: string): string {
+  const isDefault = locale === routing.defaultLocale
+  if (isDefault) return `${baseUrl}${localizedPath}`
+  // Avoid trailing slash for root: /es (not /es/)
+  return localizedPath === '/' ? `${baseUrl}/${locale}` : `${baseUrl}/${locale}${localizedPath}`
+}
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
+  const publicRoutes = Object.keys(routing.pathnames).filter((r) => !EXCLUDED_ROUTES.includes(r))
 
-  return [
-    { url: baseUrl, lastModified: LAST_MODIFIED, changeFrequency: 'monthly', priority: 1 },
-    {
-      url: `${baseUrl}/about`,
-      lastModified: LAST_MODIFIED,
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/pricing`,
-      lastModified: LAST_MODIFIED,
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-  ]
+  return routing.locales.flatMap((locale) =>
+    publicRoutes.map((route) => {
+      const localizedPath = resolveLocalePath(route, locale, routing.pathnames)
+      const url = buildUrl(baseUrl, locale, localizedPath)
+
+      const alternates = Object.fromEntries(
+        routing.locales.map((l) => {
+          const altPath = resolveLocalePath(route, l, routing.pathnames)
+          return [l, buildUrl(baseUrl, l, altPath)]
+        })
+      )
+
+      return {
+        url,
+        lastModified: new Date(),
+        changeFrequency: 'monthly' as const,
+        priority: route === '/' ? 1 : 0.8,
+        alternates: { languages: alternates },
+      }
+    })
+  )
 }

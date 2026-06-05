@@ -1,33 +1,33 @@
 import { NextRequest, NextResponse } from 'next/server'
-import createMiddleware from 'next-intl/middleware'
 
+import { buildCsp } from '@/lib/csp'
 import { routing } from '@/lib/i18n/routing'
+import { authMiddleware } from '@/middleware/auth'
+import { intlMiddleware } from '@/middleware/intl'
 
-const intlMiddleware = createMiddleware(routing)
+export function proxy(request: NextRequest): NextResponse {
+  const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
+  const isDev = process.env.NODE_ENV === 'development'
 
-export function proxy(request: NextRequest) {
-  const { pathname } = request.nextUrl
-
-  // With localePrefix: 'as-needed', next-intl passes through unprefixed paths
-  // instead of rewriting them for the [locale] App Router segment.
-  // We rewrite them manually so /about → /en/about, / → /en, etc.
-  const hasLocalePrefix = routing.locales.some(
-    (locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`)
-  )
-
-  if (!hasLocalePrefix) {
-    const url = request.nextUrl.clone()
-    // Avoid trailing slash on root to prevent 308 redirect loops:
-    // "/" → "/en" (not "/en/")
-    url.pathname =
-      pathname === '/' ? `/${routing.defaultLocale}` : `/${routing.defaultLocale}${pathname}`
-    return NextResponse.rewrite(url)
+  // Auth check runs first — redirect immediately if needed
+  const authResponse = authMiddleware(request, [...routing.locales])
+  if (authResponse) {
+    authResponse.headers.set('Content-Security-Policy', buildCsp(nonce, isDev))
+    return authResponse
   }
 
-  return intlMiddleware(request)
+  // Clone request with nonce header so Server Components can read it via headers()
+  const requestHeaders = new Headers(request.headers)
+  requestHeaders.set('x-nonce', nonce)
+
+  const response = intlMiddleware(
+    new NextRequest(request, { headers: requestHeaders })
+  ) as NextResponse
+
+  response.headers.set('Content-Security-Policy', buildCsp(nonce, isDev))
+  return response
 }
 
 export const config = {
-  // next-intl recommended matcher: exclude _next internals and files with extensions
-  matcher: ['/((?!_next|_vercel|.*\\..*).*)'],
+  matcher: ['/((?!_next|_vercel|api|.*\\..*).*)'],
 }

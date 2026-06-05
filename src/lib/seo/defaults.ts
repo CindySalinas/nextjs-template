@@ -6,4 +6,6 @@ export const seoDefaults = {
   // Replace og-image.png with your actual OG image in /public
   defaultOgImage: `${siteUrl}/og-image.png`,
   twitterHandle: process.env.NEXT_PUBLIC_TWITTER_HANDLE ?? '@yourhandle',
+  // Locale that gets no prefix in URLs (e.g. /about, not /en/about)
+  defaultLocale: 'en',
 }

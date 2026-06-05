@@ -35,7 +35,14 @@ export function RegisterForm() {
         <Input id="password" type="password" placeholder="••••••••" required />
       </div>
       <Button type="submit" disabled={isLoading} className="w-full">
-        {isLoading ? t('creatingAccount') : t('register')}
+        {isLoading ? (
+          <span className="flex items-center gap-2">
+            <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+            {t('creatingAccount')}
+          </span>
+        ) : (
+          t('register')
+        )}
       </Button>
       <p className="text-muted-foreground text-center text-sm">
         {t('alreadyHaveAccount')}{' '}

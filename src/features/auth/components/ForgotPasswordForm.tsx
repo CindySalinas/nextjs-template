@@ -40,7 +40,14 @@ export function ForgotPasswordForm() {
         <Input id="email" type="email" placeholder="you@example.com" required />
       </div>
       <Button type="submit" disabled={isLoading} className="w-full">
-        {isLoading ? t('sending') : t('sendResetLink')}
+        {isLoading ? (
+          <span className="flex items-center gap-2">
+            <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+            {t('sending')}
+          </span>
+        ) : (
+          t('sendResetLink')
+        )}
       </Button>
       <p className="text-muted-foreground text-center text-sm">
         <Link href="/login" className="underline">

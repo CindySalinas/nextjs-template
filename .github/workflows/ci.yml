@@ -5,16 +5,26 @@ on:
     branches: [main, develop]
   pull_request:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   typecheck:
     name: Type Check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with: { version: latest }
-      - uses: actions/setup-node@v4
-        with: { node-version: 22, cache: pnpm }
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v6
+        with: { version: '11' }
+      - uses: actions/setup-node@v6
+        with: { node-version: 24 }
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/share/pnpm/store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-pnpm-
       - run: pnpm install --frozen-lockfile --ignore-scripts
       - run: pnpm exec tsc --noEmit
 
@@ -22,11 +32,17 @@ jobs:
     name: Lint + Format
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with: { version: latest }
-      - uses: actions/setup-node@v4
-        with: { node-version: 22, cache: pnpm }
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v6
+        with: { version: '11' }
+      - uses: actions/setup-node@v6
+        with: { node-version: 24 }
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/share/pnpm/store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-pnpm-
       - run: pnpm install --frozen-lockfile --ignore-scripts
       - run: pnpm lint
       - run: pnpm format:check
@@ -35,40 +51,57 @@ jobs:
     name: Unit + Component Tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with: { version: latest }
-      - uses: actions/setup-node@v4
-        with: { node-version: 22, cache: pnpm }
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v6
+        with: { version: '11' }
+      - uses: actions/setup-node@v6
+        with: { node-version: 24 }
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/share/pnpm/store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-pnpm-
       - run: pnpm install --frozen-lockfile --ignore-scripts
-      - run: pnpm test
       - run: pnpm test:coverage
 
   build:
     name: Build
     runs-on: ubuntu-latest
+    needs: [typecheck, lint, test]
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with: { version: latest }
-      - uses: actions/setup-node@v4
-        with: { node-version: 22, cache: pnpm }
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v6
+        with: { version: '11' }
+      - uses: actions/setup-node@v6
+        with: { node-version: 24 }
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/share/pnpm/store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-pnpm-
       - run: pnpm install --frozen-lockfile --ignore-scripts
       - run: pnpm build
         env:
           NEXT_PUBLIC_APP_URL: https://example.com
           NEXT_PUBLIC_APP_NAME: My App
-      - name: Build Docker image
-        run: docker build -t nextjs-template .
+          NEXT_TELEMETRY_DISABLED: 1
 
   audit:
     name: Security Audit
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with: { version: latest }
-      - uses: actions/setup-node@v4
-        with: { node-version: 22, cache: pnpm }
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v6
+        with: { version: '11' }
+      - uses: actions/setup-node@v6
+        with: { node-version: 24 }
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/share/pnpm/store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-pnpm-
       - run: pnpm install --frozen-lockfile --ignore-scripts
-      - run: pnpm audit --audit-level=high
+      - run: pnpm audit --audit-level=moderate

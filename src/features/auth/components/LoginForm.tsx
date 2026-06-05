@@ -2,9 +2,10 @@
 
 import { useTranslations } from 'next-intl'
 import { useState } from 'react'
+import { toast } from 'sonner'
 
 import { useAuthContext } from '@/features/auth/providers/MockAuthProvider'
-import { Link, useRouter } from '@/lib/i18n/navigation'
+import { Link } from '@/lib/i18n/navigation'
 import { Button } from '@/ui/button'
 import { Input } from '@/ui/input'
 import { Label } from '@/ui/label'
@@ -15,7 +16,6 @@ export function LoginForm() {
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const { signIn } = useAuthContext()
-  const router = useRouter()
   const t = useTranslations('auth')
 
   async function handleSubmit(e: React.FormEvent) {
@@ -24,9 +24,10 @@ export function LoginForm() {
     setIsLoading(true)
     try {
       await signIn(email, password)
-      router.push('/dashboard')
+      // MockAuthProvider.signIn reads ?from= and calls router.replace internally
     } catch {
       setError(t('invalidCredentials'))
+      toast.error(t('invalidCredentials'))
     } finally {
       setIsLoading(false)
     }
@@ -56,9 +57,20 @@ export function LoginForm() {
           required
         />
       </div>
-      {error && <p className="text-sm text-red-500">{error}</p>}
+      {error && (
+        <p role="alert" className="text-destructive text-sm">
+          {error}
+        </p>
+      )}
       <Button type="submit" disabled={isLoading} className="w-full">
-        {isLoading ? t('signingIn') : t('signIn')}
+        {isLoading ? (
+          <span className="flex items-center gap-2">
+            <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+            {t('signingIn')}
+          </span>
+        ) : (
+          t('signIn')
+        )}
       </Button>
       <p className="text-muted-foreground text-center text-sm">
         {t('noAccount')}{' '}

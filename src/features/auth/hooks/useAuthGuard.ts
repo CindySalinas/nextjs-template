@@ -5,15 +5,15 @@ import { useEffect } from 'react'
 
 import { useSession } from './useSession'
 
-export function useAuthGuard(redirectTo = '/login') {
-  const { user, isLoading } = useSession()
+export function useAuthGuard() {
+  const session = useSession()
   const router = useRouter()
 
   useEffect(() => {
-    if (!isLoading && !user) {
-      router.replace(redirectTo)
+    if (!session.isLoading && session.user === null) {
+      router.replace('/login')
     }
-  }, [user, isLoading, router, redirectTo])
+  }, [session.user, session.isLoading, router])
 
-  return { user, isLoading }
+  return session
 }
