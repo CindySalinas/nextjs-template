@@ -2,9 +2,14 @@ packages:
   - '.'
 
 allowBuilds:
+  '@parcel/watcher': true
   '@sentry/cli': true
-  core-js-pure: set this to true or false
-  esbuild: set this to true or false
+  '@swc/core': true
+  core-js-pure: true
+  esbuild: true
+  msw: true
+  sharp: true
+  unrs-resolver: true
 
 overrides:
   postcss: '>=8.5.10'
