@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/CindySalinas/nextjs-template/compare/v1.1.0...v1.1.1) (2026-06-06)
+
+
+### Bug Fixes
+
+* allow missing native builds in pnpm-workspace to unblock setup script ([835d232](https://github.com/CindySalinas/nextjs-template/commit/835d232681246e66bcffdf8f01e8756450e0ab3b))
+
 # [1.1.0](https://github.com/CindySalinas/nextjs-template/compare/v1.0.0...v1.1.0) (2026-06-05)
 
 
